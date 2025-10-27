@@ -10,15 +10,6 @@
     <header id="header">
         <nav id="navbar">
             <div class="nav-brand">Task Manager</div>
-
-            <!-- centered links -->
-            <ul class="nav-links">
-                <li><a href="#" id="nav-home">Trang Chủ</a></li>
-                <li><a href="#" id="nav-rooms">Phòng</a></li>
-                <li><a href="#" id="nav-tasks">Công Việc</a></li>
-            </ul>
-
-            <!-- right side: user, help, logout -->
             <div id="nav-right">
                 <span id="nav-user" class="nav-user"></span>
                 <button id="help-btn" title="Help">?</button>
@@ -27,7 +18,16 @@
         </nav>
     </header>
 
-    <main id="main">
+    <div class="layout">
+        <aside id="sidebar">
+            <ul class="sidebar-links">
+                <li><a href="#" id="nav-home">Trang Chủ</a></li>
+                <li><a href="#" id="nav-rooms">Phòng</a></li>
+                <li><a href="#" id="nav-tasks">Công Việc</a></li>
+            </ul>
+        </aside>
+
+        <main id="main">
         <!-- Auth Views -->
         <section id="login-view" class="view">
             <h2>Đăng Nhập</h2>
@@ -103,7 +103,8 @@
 
         <!-- Toast Notifications -->
         <div id="toast" class="toast hidden"></div>
-    </main>
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>

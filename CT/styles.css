@@ -100,6 +100,124 @@ main {
     padding: 2rem 1rem;
 }
 
+/* layout: sidebar + main */
+.layout {
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* make sidebar narrower for compact layout */
+#sidebar {
+    width: 220px; /* widen so labels fit on one line */
+    background-color: var(--primary-color);
+    padding: 1rem;
+    min-height: calc(100vh - 48px); /* fill vertical space under header (approx) */
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0.5rem;
+}
+
+.sidebar-links li {
+    margin-bottom: 0.6rem;
+    background: transparent; /* remove global li white card */
+    padding: 0; /* let anchor handle padding */
+    box-shadow: none;
+}
+
+.sidebar-links a {
+    display: block;
+    padding: 0.6rem 0.8rem;
+    color: white;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.sidebar-links a:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+/* prettier sidebar items: icon + label, active state */
+/* compact sidebar link style: black text on light chip */
+.sidebar-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.6rem;
+    font-weight: 600;
+    box-shadow: none;
+    transition: background 0.12s, transform 0.06s;
+    color: var(--dark-color);
+    background: var(--light-color);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    width: 100%;
+    white-space: nowrap; /* prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-links a::before {
+    content: '';
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--light-color);
+    display: inline-block;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    color: var(--dark-color);
+    flex: 0 0 28px; /* keep icon box fixed width */
+}
+
+/* icons for each link by order */
+.sidebar-links li:nth-child(1) a::before { content: '\1F3E0'; /* 🏠 */ background: rgba(255,255,255,0.12); }
+.sidebar-links li:nth-child(2) a::before { content: '\1F4C1'; /* 📁 */ background: rgba(255,255,255,0.12); }
+.sidebar-links li:nth-child(3) a::before { content: '\1F4CB'; /* 📋 */ background: rgba(255,255,255,0.12); }
+
+.sidebar-links a:active { transform: translateY(1px); }
+
+.sidebar-links a.active {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06) inset;
+}
+
+.sidebar-links a.active::before {
+    background: rgba(255,255,255,0.18);
+    color: white;
+}
+
+/* stat card visual polish */
+.stat {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfbff 100%);
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+/* make the header slimmer */
+header {
+    padding: 0.6rem 1rem;
+}
+
+/* make cards stand out on blue sidebar background when layout is mobile */
+@media (max-width: 768px) {
+    .sidebar-links a::before { display: inline-block; }
+}
+
+/* make main take remaining space and keep previous max width behavior inside */
+#main {
+    flex: 1 1 auto;
+    /* override paragraph centering rules so content uses full width inside layout */
+    max-width: none;
+    margin: 0;
+    padding: 2rem 1rem;
+}
+
 .view {
     margin-bottom: 2rem;
 }
@@ -260,6 +378,21 @@ li {
 
     .nav-links {
         margin: 0;
+    }
+
+    .layout {
+        flex-direction: column;
+    }
+
+    #sidebar {
+        width: 100%;
+        min-height: auto;
+        display: flex;
+    }
+
+    .sidebar-links {
+        display: flex;
+        gap: 0.5rem;
     }
 
 

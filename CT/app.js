@@ -121,6 +121,9 @@ function showView(viewId) {
     const isLoggedIn = appData.currentUser !== null;
     // use flex when visible so layout rules apply
     navbar.style.display = isLoggedIn ? 'flex' : 'none';
+    // toggle sidebar visibility
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.style.display = isLoggedIn ? 'block' : 'none';
 
     // Update UI based on role
     if (isLoggedIn) {
@@ -304,14 +307,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nav-home').addEventListener('click', () => {
         showView(appData.currentUser.role === 'Staff' ? 'staff-dashboard' : 'member-dashboard');
         renderDashboard();
+        setActiveNav('nav-home');
     });
     document.getElementById('nav-rooms').addEventListener('click', () => {
         showView('rooms-view');
         renderRooms();
+        setActiveNav('nav-rooms');
     });
     document.getElementById('nav-tasks').addEventListener('click', () => {
         showView('tasks-view');
         renderTasks();
+        setActiveNav('nav-tasks');
     });
     // nav-logout is now a button in the right area
     const navLogoutBtn = document.getElementById('nav-logout');
@@ -337,8 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial view
     if (appData.currentUser) {
-        showView(appData.currentUser.role === 'Staff' ? 'staff-dashboard' : 'member-dashboard');
+        const dashboardView = appData.currentUser.role === 'Staff' ? 'staff-dashboard' : 'member-dashboard';
+        showView(dashboardView);
         renderDashboard();
+        // highlight home link initially
+        setActiveNav('nav-home');
     } else {
         showView('login-view');
     }
@@ -358,6 +367,13 @@ function updateNavbarForUser() {
     }
     // ensure navbar visibility
     if (navbar) navbar.style.display = appData.currentUser ? 'flex' : 'none';
+}
+
+// set active sidebar link by id (e.g., 'nav-home')
+function setActiveNav(linkId) {
+    document.querySelectorAll('.sidebar-links a').forEach(a => a.classList.remove('active'));
+    const el = document.getElementById(linkId);
+    if (el) el.classList.add('active');
 }
 
 // Additional functions for CRUD operations
