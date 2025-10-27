@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Công Việc Theo Room</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header id="header">
+        <nav id="navbar">
+            <div class="nav-brand">Task Manager</div>
+
+            <!-- centered links -->
+            <ul class="nav-links">
+                <li><a href="#" id="nav-home">Trang Chủ</a></li>
+                <li><a href="#" id="nav-rooms">Phòng</a></li>
+                <li><a href="#" id="nav-tasks">Công Việc</a></li>
+            </ul>
+
+            <!-- right side: user, help, logout -->
+            <div id="nav-right">
+                <span id="nav-user" class="nav-user"></span>
+                <button id="help-btn" title="Help">?</button>
+                <button id="nav-logout" class="btn-logout hidden">Đăng Xuất</button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <!-- Auth Views -->
+        <section id="login-view" class="view">
+            <h2>Đăng Nhập</h2>
+            <form id="login-form">
+                <input type="text" id="login-username" placeholder="Tên đăng nhập" required>
+                <input type="password" id="login-password" placeholder="Mật khẩu" required>
+                <button type="submit">Đăng Nhập</button>
+            </form>
+            <p>Chưa có tài khoản? <a href="#" id="show-register">Đăng ký</a></p>
+        </section>
+
+        <section id="register-view" class="view hidden">
+            <h2>Đăng Ký</h2>
+            <form id="register-form">
+                <input type="text" id="reg-username" placeholder="Tên đăng nhập" required>
+                <input type="password" id="reg-password" placeholder="Mật khẩu" required>
+                <input type="text" id="reg-displayname" placeholder="Tên hiển thị" required>
+                <select id="reg-role" required>
+                    <option value="">Chọn vai trò</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Member">Member</option>
+                </select>
+                <button type="submit">Đăng Ký</button>
+            </form>
+            <p>Đã có tài khoản? <a href="#" id="show-login">Đăng nhập</a></p>
+        </section>
+
+        <!-- Dashboard Views -->
+        <section id="staff-dashboard" class="view hidden">
+            <h2>Dashboard Staff</h2>
+            <div id="staff-stats">
+                <div class="stat">Tổng Task: <span id="total-tasks">0</span></div>
+                <div class="stat">Đang Mở: <span id="open-tasks">0</span></div>
+                <div class="stat">Đang Tiến Hành: <span id="in-progress-tasks">0</span></div>
+                <div class="stat">Hoàn Thành: <span id="completed-tasks">0</span></div>
+            </div>
+            <div id="overdue-tasks">
+                <h3>Task Trễ Hạn</h3>
+                <ul id="overdue-list"></ul>
+            </div>
+            <button id="export-data" onclick="exportData()">Xuất Dữ Liệu</button>
+        </section>
+
+        <section id="member-dashboard" class="view hidden">
+            <h2>Dashboard Member</h2>
+            <div id="member-tasks">
+                <h3>Công Việc Của Bạn</h3>
+                <ul id="member-task-list"></ul>
+            </div>
+        </section>
+
+        <!-- Rooms View -->
+        <section id="rooms-view" class="view hidden">
+            <h2>Phòng Dự Án</h2>
+            <button id="create-room-btn" class="hidden" onclick="createRoom()">Tạo Phòng Mới</button>
+            <ul id="rooms-list"></ul>
+        </section>
+
+        <!-- Tasks View -->
+        <section id="tasks-view" class="view hidden">
+            <h2>Công Việc</h2>
+            <button id="create-task-btn" class="hidden" onclick="createTask()">Tạo Công Việc Mới</button>
+            <ul id="tasks-list"></ul>
+        </section>
+
+        <!-- Modals -->
+        <div id="modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast" class="toast hidden"></div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
