@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công việc của tôi</title>
+    <link rel="stylesheet" th:href="@{/common-styles.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Member Dashboard</h1>
+                <p>Chào, <strong th:text="${user.fullName}">Member</strong></p>
+            </div>
+
+            <div class="nav-menu">
+                <a th:href="@{/member/dashboard}">Dashboard</a>
+                <a th:href="@{/member/tasks}" class="active">Công việc của tôi</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="logout-btn">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="page-header">
+                <h2>Danh sách công việc được giao</h2>
+            </div>
+
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+            <div th:if="${tasks == null or tasks.isEmpty()}" class="empty-state">
+                <div class="icon">📋</div>
+                <h3>Chưa có công việc nào</h3>
+                <p>Bạn chưa được giao công việc nào</p>
+            </div>
+
+            <div class="section" th:if="${tasks != null and !tasks.isEmpty()}">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên công việc</th>
+                            <th>Phòng</th>
+                            <th>Trạng thái</th>
+                            <th>Tiến độ</th>
+                            <th>Hạn chót</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="task : ${tasks}">
+                            <td>
+                                <strong th:text="${task.title}">Task name</strong>
+                                <br>
+                                <small style="color: #999;" th:text="${#strings.abbreviate(task.description, 50)}">Description</small>
+                            </td>
+                            <td th:text="${task.room != null ? task.room.roomName : 'N/A'}">Room</td>
+                            <td>
+                                <span class="badge"
+                                      th:classappend="${task.status == 'OPEN' ? 'badge-open' : (task.status == 'IN_PROGRESS' ? 'badge-progress' : 'badge-completed')}"
+                                      th:text="${task.status == 'OPEN' ? 'Mới' : (task.status == 'IN_PROGRESS' ? 'Đang làm' : 'Hoàn thành')}">
+                                    Status
+                                </span>
+                            </td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" th:style="'width: ' + ${task.progressPercent} + '%'"></div>
+                                </div>
+                                <small th:text="${task.progressPercent} + '%'">0%</small>
+                            </td>
+                            <td th:text="${#dates.format(task.dueDate, 'dd/MM/yyyy')}">Date</td>
+                            <td>
+                                <div class="task-actions">
+                                    <a th:href="@{/member/tasks/details/{id}(id=${task.taskId})}"
+                                       class="btn btn-sm">Xem</a>
+                                    <a th:href="@{/member/tasks/update/{id}(id=${task.taskId})}"
+                                       class="btn btn-sm">Cập nhật</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

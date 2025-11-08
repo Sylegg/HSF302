@@ -18,7 +18,7 @@ public class Room {
     @Column(name = "room_id")
     private Long roomId;
 
-    @Column(name = "room_name", columnDefinition = "NVARCHAR(100)")
+    @Column(name = "room_name", nullable = false,columnDefinition = "NVARCHAR(100)")
     private String roomName;
 
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
@@ -26,14 +26,23 @@ public class Room {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable = false)
-    private Date createdAt = new Date();
+    private Date createdAt;
 
     // Người tạo phòng (Staff)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
-    // Một phòng có thể có nhiều task
+    //  Một phòng có thể có nhiều task
+
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
+
+    //  Tự động set ngày tạo nếu chưa có
+    @PrePersist
+    public void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = new Date();
+        }
+    }
 }

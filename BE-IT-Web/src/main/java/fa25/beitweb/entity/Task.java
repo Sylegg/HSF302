@@ -1,5 +1,6 @@
 package fa25.beitweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -30,35 +31,43 @@ public class Task {
     @Column(name = "progress_percent")
     private Integer progressPercent = 0;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name = "due_date")
     private Date dueDate;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name = "created_at", updatable = false)
-    private Date createdAt = new Date();
+    private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(name = "updated_at")
-    private Date updatedAt = new Date();
+    private Date updatedAt;
 
-    // Người được giao task (Member)
-    @OneToOne
-    @JoinColumn(name = "assignee_id", unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id")
     private User assignee;
 
-    // Người tạo task (Staff)
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    // Task thuộc phòng nào
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
-
-    @PreUpdate
-    public void onUpdate() {
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
         this.updatedAt = new Date();
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
+    }
+
 }

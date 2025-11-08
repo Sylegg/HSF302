@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết công việc</title>
+    <link rel="stylesheet" th:href="@{/common-styles.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Member Dashboard</h1>
+                <p>Chào, <strong th:text="${user.fullName}">Member</strong></p>
+            </div>
+
+            <div class="nav-menu">
+                <a th:href="@{/member/dashboard}">Dashboard</a>
+                <a th:href="@{/member/tasks}" class="active">Công việc của tôi</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="logout-btn">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="details-container">
+                <div class="details-header">
+                    <h1 th:text="${task.title}">Task Name</h1>
+                </div>
+
+                <div class="section">
+                    <h3>Mô tả công việc</h3>
+                    <p th:text="${task.description}">Task description goes here</p>
+                </div>
+
+                <div class="section">
+                    <h3>Thông tin chi tiết</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Phòng</span>
+                            <span class="value" th:text="${task.room != null ? task.room.roomName : 'N/A'}">Room</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Người giao việc</span>
+                            <span class="value" th:text="${task.creator != null ? task.creator.fullName : 'N/A'}">Creator</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Trạng thái</span>
+                            <span class="badge"
+                                  th:classappend="${task.status == 'OPEN' ? 'badge-open' : (task.status == 'IN_PROGRESS' ? 'badge-progress' : 'badge-completed')}"
+                                  th:text="${task.status == 'OPEN' ? 'Mới' : (task.status == 'IN_PROGRESS' ? 'Đang làm' : 'Hoàn thành')}">
+                                Status
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Ngày tạo</span>
+                            <span class="value" th:text="${#dates.format(task.createdAt, 'dd/MM/yyyy HH:mm')}">Date</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Hạn chót</span>
+                            <span class="value" th:text="${#dates.format(task.dueDate, 'dd/MM/yyyy')}">Date</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Cập nhật lần cuối</span>
+                            <span class="value" th:text="${#dates.format(task.updatedAt, 'dd/MM/yyyy HH:mm')}">Date</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Tiến độ hoàn thành</h3>
+                    <div class="progress-section">
+                        <div class="progress-bar full-width">
+                            <div class="progress-fill"
+                                 th:style="'width: ' + ${task.progressPercent} + '%'"
+                                 th:text="${task.progressPercent} + '%'">
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section" style="text-align: center;">
+                    <a th:href="@{/member/tasks}" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

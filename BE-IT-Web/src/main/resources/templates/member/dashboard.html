@@ -2,10 +2,113 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Dashboard</title>
+    <link rel="stylesheet" th:href="@{/common-styles.css}">
 </head>
 <body>
-<h2>Xin chào <span th:text="${session.user.fullName}"></span> (Member)</h2>
-<a th:href="@{/logout}">Đăng xuất</a>
+    <div class="wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Member Dashboard</h1>
+                <p>Chào mừng, <strong th:text="${user.fullName}">Member</strong></p>
+            </div>
+
+            <div class="nav-menu">
+                <a th:href="@{/member/dashboard}" class="active">Dashboard</a>
+                <a th:href="@{/member/tasks}">Công việc của tôi</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="logout-btn">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="page-header">
+                <h2>Tổng quan công việc</h2>
+            </div>
+
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Tổng công việc</h3>
+                    <div class="number" th:text="${tasks != null ? tasks.size() : 0}">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Đang thực hiện</h3>
+                    <div class="number" th:text="${inProgressCount != null ? inProgressCount : 0}">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Hoàn thành</h3>
+                    <div class="number" th:text="${completedCount != null ? completedCount : 0}">0</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Công việc được giao</h2>
+                </div>
+
+                <div th:if="${tasks == null or tasks.isEmpty()}" class="empty-state">
+                    <div class="icon">📋</div>
+                    <h3>Chưa có công việc nào</h3>
+                    <p>Bạn chưa được giao công việc nào. Vui lòng liên hệ quản lý để được phân công công việc.</p>
+                </div>
+
+                <div class="tasks-grid" th:if="${tasks != null and !tasks.isEmpty()}">
+                    <div class="task-card" th:each="task : ${tasks}">
+                        <div class="task-header">
+                            <div class="task-title" th:text="${task.title}">Task Name</div>
+                            <span class="badge"
+                                  th:classappend="${task.status == 'OPEN' ? 'badge-open' : (task.status == 'IN_PROGRESS' ? 'badge-progress' : 'badge-completed')}"
+                                  th:text="${task.status == 'OPEN' ? 'Mới' : (task.status == 'IN_PROGRESS' ? 'Đang làm' : 'Hoàn thành')}">
+                                Status
+                            </span>
+                        </div>
+
+                        <div class="task-description" th:text="${task.description}">
+                            Task description goes here
+                        </div>
+
+                        <div class="task-meta">
+                            <div class="task-meta-item">
+                                <span class="label">Phòng</span>
+                                <span class="value" th:text="${task.room != null ? task.room.roomName : 'N/A'}">Room</span>
+                            </div>
+                            <div class="task-meta-item">
+                                <span class="label">Hạn chót</span>
+                                <span class="value" th:text="${#dates.format(task.dueDate, 'dd/MM/yyyy')}">Date</span>
+                            </div>
+                            <div class="task-meta-item">
+                                <span class="label">Người giao</span>
+                                <span class="value" th:text="${task.creator != null ? task.creator.fullName : 'N/A'}">Creator</span>
+                            </div>
+                        </div>
+
+                        <div class="progress-section">
+                            <div class="label">Tiến độ hoàn thành</div>
+                            <div class="progress-bar full-width">
+                                <div class="progress-fill"
+                                     th:style="'width: ' + ${task.progressPercent} + '%'"
+                                     th:text="${task.progressPercent} + '%'">
+                                    0%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-actions">
+                            <a th:href="@{/member/tasks/details/{id}(id=${task.taskId})}" class="btn">Xem chi tiết</a>
+                            <a th:href="@{/member/tasks/update/{id}(id=${task.taskId})}" class="btn">Cập nhật tiến độ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+

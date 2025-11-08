@@ -14,6 +14,11 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/login";
+    }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "login"; // -> templates/login.html
@@ -30,9 +35,9 @@ public class LoginController {
         if (user != null) {
             session.setAttribute("user", user);
             if ("STAFF".equalsIgnoreCase(user.getRole())) {
-                return "staff/dashboard";
+                return "redirect:/staff/dashboard";
             } else {
-                return "member/dashboard";
+                return "redirect:/member/dashboard";
             }
         } else {
             model.addAttribute("error", "Sai email hoặc mật khẩu!");

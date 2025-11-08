@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Nhân viên</title>
+    <link rel="stylesheet" th:href="@{/common-styles.css}">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Staff Dashboard</h1>
+                <p>Chào, <strong th:text="${user.fullName}">Staff</strong></p>
+            </div>
+
+            <div class="nav-menu">
+                <a th:href="@{/staff/dashboard}">Dashboard</a>
+                <a th:href="@{/staff/rooms}">Phòng ban</a>
+                <a th:href="@{/staff/tasks}">Công việc</a>
+                <a th:href="@{/staff/members}" class="active">Nhân viên</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="logout-btn">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="page-header">
+                <h2>Quản lý Nhân viên</h2>
+            </div>
+
+            <div th:if="${members == null or members.isEmpty()}" class="empty-state">
+                <h3>Chưa có nhân viên nào</h3>
+                <p>Nhân viên có thể đăng ký tài khoản để tham gia hệ thống</p>
+            </div>
+
+            <div class="members-grid" th:if="${members != null and !members.isEmpty()}">
+                <div class="member-card" th:each="member : ${members}">
+                    <div class="member-avatar">NV</div>
+                    <h3 th:text="${member.fullName}">Member Name</h3>
+                    <div class="email" th:text="${member.email}">email@example.com</div>
+
+                    <div class="member-stats">
+                        <div class="stat">
+                            <span class="label">Công việc</span>
+                            <span class="value" th:text="${taskCountMap.get(member.userId)}">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Hoàn thành</span>
+                            <span class="value" th:text="${completedCountMap.get(member.userId)}">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

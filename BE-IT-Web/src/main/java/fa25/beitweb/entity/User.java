@@ -19,7 +19,7 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "email",nullable = false, unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
     @Column(name = "password", nullable = false, length = 100)
@@ -40,7 +40,7 @@ public class User {
     private List<Task> createdTasks = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "assignee", cascade = CascadeType.ALL)
-    private Task assignedTask;
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
+    private List<Task> assignedTasks = new ArrayList<>();
 }
 
